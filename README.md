@@ -1,2 +1,3 @@
 # Signal_PPG
-get heartbeat from video
+This project is about getting a heartbeat from a given video.
+Currently incomplete.
