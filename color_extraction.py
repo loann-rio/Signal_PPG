@@ -103,6 +103,6 @@ while success:
 
 
 print('saving')
-with open(r'C:\Users\loann\Desktop\codes\python\save_list_colors.txt', 'w') as f:
+with open(r'save_list_colors.txt', 'w') as f:
     f.write(''.join([str(v)+' ' for v in R]) + '\n' + ''.join([str(v)+' ' for v in G]) + '\n' + ''.join([str(v)+' ' for v in B]))
 print('done')
