@@ -6,7 +6,7 @@ from sklearn.decomposition import FastICA, PCA
 
 
 # import lists of values
-with open(r'C:\Users\loann\Desktop\codes\python\save_list_colors.txt', 'r') as f:
+with open(r'save_list_colors.txt', 'r') as f:
     t = f.read()
 
 FS = 30.08 # fps of the video
@@ -17,6 +17,7 @@ B:list = []
 
 t = t.split('\n') # split different colors
 
+# range of frame taken into account in the video:
 s = 0
 f = 800 # 1623
 
@@ -28,6 +29,7 @@ B = [float(c) for c in t[2].split()[s:f]]
 
 T = np.arange(0, len(R)/25, 1/25) # set list of time (we have a frequency of 25fps)
 
+# standadisation:
 std = np.std(G)
 mean = np.mean(G)
 newG:list = [(x-mean)/std for x in G]
@@ -40,6 +42,7 @@ std = np.std(B)
 mean = np.mean(B)
 newB:list = [(x-mean)/std for x in B]
 
+# ICA:
 # https://www.geeksforgeeks.org/blind-source-separation-using-fastica-in-scikit-learn/
 # no idea what I am doing, stole it from webside above.
 signalSumation = np.c_[newR, newG, newB]
@@ -70,7 +73,7 @@ for i in range(3):
 sp = np.fft.fft(newG)
 freq = np.fft.fftfreq(800, 1/FS)
 
-# get the frequency coresponding to the highest result
+# get the frequency coresponding to the highest point in FFT
 print('bpm=', 60*freq[list(np.abs(sp.real)).index(max((np.abs(sp.real)[:len(freq)//2])[25:200]))])
 
 
