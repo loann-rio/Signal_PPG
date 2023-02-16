@@ -3,21 +3,18 @@
 import cv2
 import numpy as np
 
+videoPath = r"" # enter path to video
+eyeCascadePath = r"" # enter path to eyeCascade
 
-video = cv2.VideoCapture(r"C:\Users\loann\Pictures\Camera Roll\WIN_20230215_19_18_11_Pro.mp4")
-# video has a resolution of 1920*1080
-# frame rate 25Hz
-# T = 64s
+video = cv2.VideoCapture(videoPath)
 
-faceCascade = cv2.CascadeClassifier(r"C:\Users\loann\Desktop\codes\python\face_detection\haarcascade_frontalface_default.xml")
-eyeCascade = cv2.CascadeClassifier(r"C:\Users\loann\Desktop\codes\python\face_detection\haarcascade_eye.xml")  
+eyeCascade = cv2.CascadeClassifier(eyeCascadePath)  
 
 def process_frame(frame, last_pos_eyes) -> tuple:
-    # return average of each color as a tuple
+    # return average of each color as a tuple for a single frame
 
-    # print('___getting eyes pos____')
     pos_eyes = get_pos_eyes(frame, last_pos_eyes)
-    # print('=> done')
+
     if not pos_eyes:
         # the the pos is not defined, continue
         return None, None
@@ -39,9 +36,7 @@ def process_frame(frame, last_pos_eyes) -> tuple:
     new_pos_y = pos_eyes[0][1] + vy/2 - lens/4
 
     # crop the image to the size of the new squarre [could be optimized]
-    new_frame = frame[int(new_pos_y-3*lens/4):int(new_pos_y), int(new_pos_x-lens*1.5/2):int(new_pos_x+lens*1.5/2)]
-    # print('=> done')
-    
+    new_frame = frame[int(new_pos_y-3*lens/4):int(new_pos_y), int(new_pos_x-lens*1.5/2):int(new_pos_x+lens*1.5/2)]    
 
     # get the average of colors
     R = int(np.average(new_frame[:, :, 0]))
@@ -103,9 +98,11 @@ while success:
     G.append(color[1])
     B.append(color[2])
 
+    # get next frame from video:
     success, image = video.read()
 
 
 print('saving')
 with open(r'C:\Users\loann\Desktop\codes\python\save_list_colors.txt', 'w') as f:
     f.write(''.join([str(v)+' ' for v in R]) + '\n' + ''.join([str(v)+' ' for v in G]) + '\n' + ''.join([str(v)+' ' for v in B]))
+print('done')
