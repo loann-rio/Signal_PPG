@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 
-video = cv2.VideoCapture(r"MVI_5333.MP4")
+video = cv2.VideoCapture(r"C:\Users\loann\Pictures\Camera Roll\WIN_20230215_19_18_11_Pro.mp4")
 # video has a resolution of 1920*1080
 # frame rate 25Hz
 # T = 64s
@@ -38,20 +38,16 @@ def process_frame(frame, last_pos_eyes) -> tuple:
     new_pos_x = pos_eyes[0][0] + vx/2
     new_pos_y = pos_eyes[0][1] + vy/2 - lens/4
 
-    # print('___crop___')
     # crop the image to the size of the new squarre [could be optimized]
     new_frame = frame[int(new_pos_y-3*lens/4):int(new_pos_y), int(new_pos_x-lens*1.5/2):int(new_pos_x+lens*1.5/2)]
     # print('=> done')
     
 
-    # print('___getting avg___')
     # get the average of colors
     R = int(np.average(new_frame[:, :, 0]))
     G = int(np.average(new_frame[:, :, 1]))
     B = int(np.average(new_frame[:, :, 2]))
-    # print('=> done')
 
-    # print('return, colors')
     return (R, G, B), pos_eyes
 
 
@@ -108,6 +104,7 @@ while success:
     B.append(color[2])
 
     success, image = video.read()
+
 
 print('saving')
 with open(r'C:\Users\loann\Desktop\codes\python\save_list_colors.txt', 'w') as f:
